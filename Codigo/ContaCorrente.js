@@ -1,11 +1,10 @@
 //Classes
-class contaEstudantil{
-    constructor(numero,cpf,saldo,ativa,Estudantil){
+class contaCorrente{
+    constructor(numero,cpf,saldo,ativa){
     this.numero = numero;
     this.cpf = cpf;
     this.saldo = saldo;
-    this.ativa = ativa;
-    this.Estudantil = Estudantil;
+    this.ativa = ativa
 }
 
 //Ativar a conta
@@ -24,7 +23,7 @@ Credito(valor){
         console.log("Saldo zerado...")
     }
     else {
-        this.saldo -= valor
+        this.saldo += valor
     }
     }
     else{
@@ -53,19 +52,10 @@ else{
     console.log("Conta Inativa...")
 }
 }
-UsarEstudantil(valor){
-
+pedirTalao(NCH){
     if(this.ativa){
-    if(Estudantil<0){
-        console.log("Impossivel Realizar o Emprestimo, seu valor é negativo...")
-    }
-    else if(Estudantil == 0){
-        console.log("Seu Emprestimo está zerado...")
-    }
-    else {
-        this.Estudantil -= valor
-        this.saldo += valor
-    }
+        this.saldo+=(30*NCH)
+
 }
 else{
     console.log("Conta Inativa...")
@@ -78,29 +68,45 @@ else{
 const leia = require("prompt-sync")()
 let numero = parseInt(leia ("Digite o numero da Conta : "))
 let cpf = leia("Digite o cpf da conta : ")
-let Estudantil = 5000
-let C1 = new contaEstudantil(numero,cpf,0,false,Estudantil)
+let C1 = new contaCorrente(numero,cpf,0,false)
 let op=""
-
+let NCH = ""
+let nCheque = 0
 let valor = 0
+let continuar = ""
 C1.ativar()
 for(let x=1; x<=10; x++){
-    op = leia("Digite D - debito, C para Credito ou E para Estudantil: ")
+    op = leia("Digite D - debito, C para Credito: ")
     if(op=="D"){
         valor = parseInt(leia ("Digite o valor para debito : "))
         C1.Debito(valor)
+        continuar=leia("continuar S/N : ")
+        if(continuar=="N" || continuar=="n"){
+            console.log("obrigado por fazer operações conosco")
+            x+= 10
+        }
     }
     else if(op=="C") {
         valor = parseInt(leia ("Digite o valor para Credito : "))
         C1.Credito(valor)
+        continuar=leia("continuar S/N : ")
+    if(continuar=="N" || continuar=="n"){
+        console.log("obrigado por fazer operações conosco")
+        x+= 10
     }
-    else if(op=="E") {
-        valor = parseInt(leia ("Digite o valor para Emprestimo : "))
-        C1.UsarEstudantil(valor)
-        console.log("saldo restante do emprestimo: " + C1.Estudantil)
     }
-    console.log("Saldo atual conta : " + C1.saldo)
+    }
 
+console.log("Saldo atual conta : " + C1.saldo)
+continuar=leia("gostaria de sacar um cheque? S/N : ")
+if (continuar=="S" || continuar =="s"){
+    NCH=leia("quantos cheques voce vai querer? : ")
+    if(NCH<=3){
+        C1.pedirTalao(NCH)
+    }
+    else{
+        console.log("numero invalido")
+    }
 }
 
 console.log("Saldo final da conta :" + C1.saldo)
